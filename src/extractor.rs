@@ -58,11 +58,11 @@ pub fn extraer_datos(args: &ZenArgs) -> io::Result<()> {
     if !contenido_total.is_empty() {
         fs::write(&args.output, contenido_total)?;
         if !args.silent {
-            println!("✅ Reporte generado en: {:?}", args.output);
+            println!("Reporte generado en: {:?}", args.output);
         }
     } else {
         if !args.silent {
-            println!("⚠️ No se encontraron archivos con esas extensiones. No se creó el reporte.");
+            println!("No se encontraron archivos con esas extensiones. No se creó el reporte.");
         }
     }
 
