@@ -1,93 +1,84 @@
-# 🦀 Zen-Grab CLI
+ Zen-Grab CLI
 
-**Zen-Grab** es una herramienta sencilla pero poderosa creada en **Rust**. Su función es entrar en tus carpetas, buscar archivos de código y "agarrar" (grab) todo su contenido para ponerlo en un solo lugar. 
+Zen-Grab es una herramienta minimalista, rápida y segura escrita en Rust. Su objetivo es consolidar múltiples archivos de código en un único documento de texto, facilitando auditorías, revisiones de código o generación de contexto para IAs.
+ ¿Para qué sirve?
 
----
+Imagina que tienes un proyecto con decenas de archivos y quieres enviárselos a un mentor o a una IA. En lugar de copiar y pegar manualmente, Zen-Grab recorre tus carpetas, filtra lo que necesitas y lo entrega todo listo en un solo archivo.
+ Cómo funciona (Bajo el capó)
 
-## ¿Para qué sirve?
+    Escaneo Eficiente: Utiliza recursividad para navegar por directorios sin importar la profundidad.
 
-Imagina que tienes un proyecto con 50 archivos de código y quieres enviárselos a un mentor o a una IA para que los revise. En lugar de copiar y pegar archivo por archivo, **Zen-Grab** lo hace por ti en menos de un segundo.
+    Filtrado Selectivo: Tú decides qué extensiones incluir. El programa ignora binarios, imágenes y archivos pesados innecesarios.
 
-## Cómo funciona (Para principiantes)
+    Lectura Blindada (BufReader): A diferencia de otras herramientas, Zen-Grab utiliza un sistema de lectura por búfer que protege la memoria RAM de tu sistema, permitiendo procesar archivos de forma estable incluso en entornos con pocos recursos.
 
-Si estás aprendiendo a programar, esto es lo que hace este programa "bajo el capó":
+Instalación
+Opción 1: Instalación Rápida (Recomendado)
 
-1. **Escaneo Recursivo:** El programa entra en la carpeta que le digas y, si encuentra más carpetas adentro, entra en ellas también. No deja ningún rincón sin revisar.
-2. **Filtrado:** Tú le dices: "Solo quiero archivos `.rs` (Rust) o `.js` (JavaScript)". El programa ignora todo lo demás (imágenes, videos, carpetas ocultas).
-3. **Consolidación:** Abre cada archivo, lee lo que tiene escrito y lo va pegando en un "buffer" (una memoria temporal) para finalmente escribirlo todo en un solo archivo de texto.
+Si tienes Rust instalado, puedes instalarlo directamente desde el repositorio:
+Bash
 
----
+cargo install --git https://github.com/AntonyRst/zen-grab
 
-## Cómo instalarlo en tu PC
+Opción 2: Compilación Manual
 
-Como este programa está hecho en **Rust**, necesitas tener instalado el lenguaje en tu sistema (si usas **Arch Linux**, el comando `sudo pacman -S rust` es tu amigo).
+    Clona el código:
+    Bash
 
-1. **Descarga el código:**
-   ```bash
-   git clone [https://github.com/tu-usuario/zen-grab.git](https://github.com/tu-usuario/zen-grab.git)
-   cd zen-grab
+    git clone https://github.com/AntonyRst/zen-grab.git
+    cd zen-grab
 
-2. **Prepáralo para usar:**
+    Compila la versión optimizada:
+    Bash
 
-Ejecuta este comando para que Rust cree el ejecutable optimizado:
-
-    ```bash
     cargo build --release
-    ```
 
-3. **Muévelo a tus comandos personales:**
-Para poder usarlo desde cualquier parte de tu terminal:
+    Añádelo a tu PATH:
+    Bash
 
-    ```bash
     cp target/release/zen_grab ~/.local/bin/
-    ```
 
-**Guía de uso rápido**
+Guía de Uso
 
-**Es muy fácil de usar. Solo tienes que abrir tu terminal y escribir:**
-1. **El uso más básico**
+La nueva sintaxis es más limpia y "Zen". El primer argumento siempre es el archivo de salida.
+1. Guardar todo el código de la carpeta actual
+Bash
 
-    ```bash
-    zen_grab .
-    ```
+zen_grab reporte.txt
 
-    (El punto . significa "esta carpeta". Esto imprimirá todo el código de la carpeta actual en tu pantalla).
+2. Filtrar por extensiones (sin comas, solo espacios)
+Bash
 
-2. **Guardar en un archivo (Lo más útil)**
+zen_grab mi_codigo.txt -e rs scss js
 
-    ```bash
-    zen_grab . -o mi_codigo.txt
-    ```
-    (Esto crea un archivo llamado mi_codigo.txt con todo tu trabajo adentro).
+3. Especificar una carpeta diferente
+Bash
 
-3. **Buscar solo archivos específicos**
+zen_grab salida.txt -p ./src/componentes -e rs
 
-    ```bash
-    zen_grab . -e rs,scss -o reporte.txt
-    ```
+ Notas de Seguridad y Limitaciones
 
-    (Aquí le estamos diciendo: "Busca solo archivos de Rust y de SASS, y guárdalos en reporte.txt").
+    Gestión de Memoria: Zen-Grab está diseñado para ser seguro. Sin embargo, se recomienda usar el flag -e (extensiones) cuando se escaneen directorios que contengan archivos binarios muy grandes para evitar consumos de RAM innecesarios.
 
-**Entendiendo el código (Módulos)**
+    Privacidad: La herramienta corre 100% local. No envía datos a internet ni guarda información del usuario.
 
-Si tienes curiosidad de cómo está organizado el código en este repositorio:
+    Compatibilidad: Probado extensamente en Arch Linux, pero es totalmente multiplataforma (Windows, macOS y Linux).
 
-    main.rs: Es el director de orquesta. Recibe tus órdenes y llama a los demás.
+Estructura del Proyecto
 
-    args.rs: Aquí es donde el programa "aprende" a entender las banderas que escribes (como -e o -o).
+    main.rs: El punto de entrada que coordina la ejecución.
 
-    extractor.rs: Aquí está la magia. Es el código que realmente abre los archivos y lee su contenido.
+    args.rs: Definición de la interfaz de comandos usando Clap.
 
+    extractor.rs: El motor de la herramienta; gestiona la lectura eficiente de archivos y el filtrado.
 
-**Sobre el Autor**
+ Sobre el Autor
 
-Soy Juan Antonio González, un desarrollador apasionado por los sistemas y la eficiencia. Me encanta crear herramientas que ayuden a otros programadores a trabajar mejor.
+Soy Juan Antonio González, un desarrollador enfocado en sistemas, eficiencia y minimalismo. Me apasiona crear herramientas CLI que simplifiquen el flujo de trabajo de otros programadores.
 
-    LinkedIn: [www.linkedin.com/in/juan-antonio-gonzález-erazo-96841a403]
+    LinkedIn: Juan Antonio González Erazo
 
-**Este proyecto fue desarrollado en Arch Linux. ¡La terminal es el límite!**
-
-
+Desarrollado con Rust en Arch Linux.
 
 
 
